@@ -554,3 +554,242 @@ html, body {
     font-weight: 300;
 }
 
+/* ===== MOBILE SWIPE HINT ===== */
+.swipe-hint {
+    display: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.35);
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.swipe-hint .swipe-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    position: relative;
+    animation: swipeAnim 2s ease-in-out infinite;
+}
+
+.swipe-hint .swipe-icon::after {
+    content: '←→';
+    font-size: 0.5rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes swipeAnim {
+    0%, 100% { transform: translateX(0); opacity: 0.5; }
+    50% { transform: translateX(-6px); opacity: 1; }
+}
+
+/* ===== SLIDE PROGRESS DOTS (Mobile) ===== */
+.slide-progress {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    gap: 8px;
+    align-items: center;
+}
+
+.slide-progress .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    transition: all 0.4s ease;
+}
+
+.slide-progress .dot.active {
+    background: #ffffff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    width: 18px;
+    border-radius: 10px;
+}
+
+/* ==============================================
+   MOBILE RESPONSIVE — max-width: 768px
+   ============================================== */
+@media (max-width: 768px) {
+
+    html, body {
+        overflow: hidden;
+        touch-action: pan-y; /* Allow vertical but we handle horizontal */
+    }
+
+    /* --- HERO IMAGES: Move to top-center on mobile --- */
+    .hero-image-container {
+        position: fixed;
+        top: 8%;
+        left: 50%;
+        transform: translate(-50%, 0) !important;
+        width: 90%;
+        max-width: 320px;
+        height: auto;
+        z-index: 5;
+    }
+
+    .hero-image, model-viewer {
+        height: 250px !important;
+        width: 100% !important;
+    }
+
+    #global-gpu-slot {
+        max-width: 340px;
+        width: 90% !important;
+        height: 280px !important;
+    }
+
+    #global-gpu-slot .hero-image {
+        width: 55% !important;
+    }
+
+    #global-gpu-slot #gpu-card {
+        width: 40% !important;
+        left: 220px !important;
+    }
+
+    /* --- SLIDES: Fullscreen stacked layout --- */
+    .slide {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 50px;
+    }
+
+    .slide-content {
+        padding: 0 20px;
+        width: 100%;
+    }
+
+    .split-layout {
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        height: auto;
+    }
+
+    .left-column {
+        max-width: 100%;
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .right-column {
+        display: none;
+    }
+
+    /* --- TYPOGRAPHY: Smaller for mobile --- */
+    .hero-title {
+        font-size: clamp(1.8rem, 8vw, 2.8rem);
+        margin-bottom: 8px;
+        line-height: 1.1;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(0.8rem, 3.5vw, 1rem);
+        margin-bottom: 12px;
+    }
+
+    .badge {
+        font-size: 0.55rem;
+        padding: 4px 10px;
+        margin-bottom: 12px;
+    }
+
+    .premium-bullets {
+        gap: 8px;
+    }
+
+    .premium-bullets li {
+        font-size: 0.8rem;
+        gap: 8px;
+    }
+
+    /* --- Hide keyboard hints, show swipe hint --- */
+    .keyboard-hint {
+        display: none !important;
+    }
+
+    .swipe-hint {
+        display: flex;
+    }
+
+    /* --- Show progress dots on mobile --- */
+    .slide-progress {
+        display: flex;
+    }
+
+    /* --- Hologram panels: Smaller on mobile --- */
+    .hologram-panel {
+        width: 100px;
+        padding: 8px;
+        font-size: 0.55rem;
+    }
+
+    .holo-header {
+        font-size: 0.45rem;
+        margin-bottom: 8px;
+    }
+
+    .holo-temp-circle {
+        width: 45px;
+        height: 45px;
+        font-size: 0.8rem;
+    }
+
+    /* --- Connectivity icons: Smaller --- */
+    .conn-icon-wrapper {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+    }
+
+    .conn-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* --- Canvas: keep lightweight --- */
+    #dustCanvas {
+        opacity: 0.3;
+    }
+}
+
+/* ===== VERY SMALL SCREENS (max-width: 400px) ===== */
+@media (max-width: 400px) {
+
+    .hero-image-container {
+        top: 5%;
+        max-width: 260px;
+    }
+
+    .hero-image, model-viewer {
+        height: 200px !important;
+    }
+
+    .hero-title {
+        font-size: clamp(1.5rem, 7vw, 2.2rem);
+    }
+
+    .premium-bullets li {
+        font-size: 0.7rem;
+    }
+
+    .slide {
+        padding-bottom: 40px;
+    }
+}
+

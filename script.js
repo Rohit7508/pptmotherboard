@@ -586,7 +586,10 @@ function initDustParticles() {
     window.addEventListener("resize", resize);
     resize();
     
-    const particleCount = Math.floor((width * height) / 35000); // Reduced for performance 
+    const isMobile = window.innerWidth <= 768;
+    const particleCount = isMobile 
+        ? Math.floor((width * height) / 80000)  // Fewer particles on mobile
+        : Math.floor((width * height) / 35000);
     
     for (let i = 0; i < particleCount; i++) {
         particles.push({
@@ -626,3 +629,83 @@ function initDustParticles() {
     
     animate();
 }
+
+// ============================================================
+//  MOBILE TOUCH SWIPE NAVIGATION
+// ============================================================
+(function initMobileSwipe() {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    const SWIPE_THRESHOLD = 50; // Minimum swipe distance in px
+
+    document.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener("touchend", (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        if (isAnimating) return;
+
+        const diffX = touchStartX - touchEndX;
+        const diffY = touchStartY - touchEndY;
+
+        // Only trigger if horizontal swipe is dominant
+        if (Math.abs(diffX) < SWIPE_THRESHOLD) return;
+        if (Math.abs(diffX) < Math.abs(diffY)) return;
+
+        if (diffX > 0) {
+            // Swiped LEFT → next slide
+            if (currentSlide < slides.length - 1) {
+                goToSlide(currentSlide + 1, "forward");
+            }
+        } else {
+            // Swiped RIGHT → previous slide
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1, "backward");
+            }
+        }
+    }
+})();
+
+// ============================================================
+//  MOBILE PROGRESS DOTS
+// ============================================================
+(function initProgressDots() {
+    // Create progress dots container
+    const dotsContainer = document.createElement("div");
+    dotsContainer.classList.add("slide-progress");
+    dotsContainer.id = "slide-progress";
+
+    for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement("div");
+        dot.classList.add("dot");
+        if (i === 0) dot.classList.add("active");
+        dot.dataset.index = i;
+        dotsContainer.appendChild(dot);
+    }
+
+    document.body.appendChild(dotsContainer);
+
+    // Update dots when slide changes — hook into goToSlide
+    const originalGoToSlide = window.goToSlide || goToSlide;
+    
+    // We observe slide changes via a MutationObserver on the slide classes
+    const observer = new MutationObserver(() => {
+        const allDots = dotsContainer.querySelectorAll(".dot");
+        allDots.forEach((d, i) => {
+            d.classList.toggle("active", i === currentSlide);
+        });
+    });
+
+    slides.forEach(slide => {
+        observer.observe(slide, { attributes: true, attributeFilter: ["class"] });
+    });
+})();
