@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features of Motherboards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- Add Google Model Viewer for 3D GLB support -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+</head>
+<body>
+    
+    <canvas id="dustCanvas"></canvas>
+
+    <!-- Global Persistent Elements (Images on the Right) -->
+    <div id="global-model" class="hero-image-container" style="opacity: 1;">
+        <!-- True Interactive 3D Model -->
+        <model-viewer src="motherboard__components.glb" camera-controls interaction-prompt="none" min-camera-orbit="auto 0deg auto" max-camera-orbit="auto 180deg auto" exposure="1" environment-image="neutral" class="hero-image" style="width: 100%; height: 600px; transform: translateZ(20px); mix-blend-mode: normal !important;"></model-viewer>
+        
+
+
+        <div class="light-sweep"></div>
+    </div>
+
+    <div id="global-chipset" class="hero-image-container" style="opacity: 0; pointer-events: none; transform: scale(0.8);">
+        <model-viewer src="processor_intel_core_i9.glb" camera-controls interaction-prompt="none" min-camera-orbit="auto 0deg auto" max-camera-orbit="auto 180deg auto" exposure="1.2" environment-image="neutral" class="hero-image" style="width: 100%; height: 500px; transform: translateZ(80px); mix-blend-mode: normal !important;"></model-viewer>
+        <div class="light-sweep"></div>
+    </div>
+
+    <!-- Animated GPU Connection -->
+    <div id="global-gpu-slot" class="hero-image-container" style="opacity: 0; pointer-events: none; transform: scale(0.8); width: 800px; height: 600px;">
+        <img src="motherboard.PNG" alt="Motherboard" class="hero-image" id="gpu-motherboard" style="position: absolute; left: 0; top: 10%; width: 60%; mix-blend-mode: screen;">
+        
+        <!-- SVG Arrow pointing to PCIe slot -->
+        <svg id="pcie-arrow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15;">
+            <!-- Dashed line pointing to the PCIe slot -->
+            <path id="arrow-path" d="M 500 250 L 250 400" fill="none" stroke="#00d2ff" stroke-width="3" stroke-dasharray="10,10" style="opacity: 0; filter: drop-shadow(0 0 5px #00d2ff);"/>
+            <!-- Triangle arrow head -->
+            <polygon id="arrow-head" points="250,400 270,385 260,375" fill="#00d2ff" style="opacity: 0; filter: drop-shadow(0 0 5px #00d2ff);"/>
+            <!-- Text label -->
+            <text id="arrow-text" x="520" y="240" fill="#00d2ff" font-family="'JetBrains Mono', monospace" font-size="16" style="opacity: 0; filter: drop-shadow(0 0 5px #00d2ff);">PCIe 4.0 x16 SLOT</text>
+            <!-- Glowing target circle on the slot itself -->
+            <circle id="arrow-target" cx="240" cy="410" r="15" fill="none" stroke="#00d2ff" stroke-width="2" style="opacity: 0; filter: drop-shadow(0 0 8px #00d2ff);"/>
+        </svg>
+
+        <img src="gpu.png" alt="GPU" id="gpu-card" class="hero-image" style="position: absolute; left: 400px; top: 50px; width: 45%; mix-blend-mode: screen; filter: drop-shadow(0 0 30px rgba(0, 210, 255, 0.4)) contrast(1.8) brightness(0.85); -webkit-mask-image: radial-gradient(ellipse at center, black 65%, transparent 95%); mask-image: radial-gradient(ellipse at center, black 65%, transparent 95%); opacity: 0;">
+        
+        <div class="light-sweep"></div>
+    </div>
+
+    <!-- New RAM Slide -->
+    <div id="global-ram" class="hero-image-container" style="opacity: 0; pointer-events: none; transform: scale(0.8);">
+        <video src="ram.mp4" id="ram-module" class="hero-image" autoplay muted playsinline style="width: 100%; transform: scale(1.4); mix-blend-mode: screen; filter: drop-shadow(0 0 40px rgba(0, 210, 255, 0.4)); -webkit-mask-image: radial-gradient(ellipse at center, black 65%, transparent 95%); mask-image: radial-gradient(ellipse at center, black 65%, transparent 95%);"></video>
+        <div id="ram-particles" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+        <div class="light-sweep"></div>
+    </div>
+
+    <!-- New Cooling Slide -->
+    <div id="global-cooling" class="hero-image-container" style="opacity: 0; pointer-events: none; transform: scale(0.8);">
+        <img src="motherboard.PNG" alt="Motherboard with Cooling" class="hero-image" id="cooling-motherboard">
+        <!-- Replaced ugly img with the fancy 3D fan video -->
+        <video src="fancool.mp4" id="cooling-cooler" class="cooling-component" autoplay loop muted playsinline style="position: absolute; top: 38%; left: 53%; transform: translate(-50%, -50%); width: 65%; mix-blend-mode: screen; filter: brightness(1.6) contrast(1.3) drop-shadow(0 0 60px rgba(0, 210, 255, 0.8)); -webkit-mask-image: radial-gradient(circle, black 65%, transparent 95%); mask-image: radial-gradient(circle, black 65%, transparent 95%);"></video>
+        <!-- Airflow effect -->
+        <div id="airflow-waves" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;"></div>
+        <div class="light-sweep"></div>
+    </div>
+
+    <!-- New Connectivity Slide -->
+    <div id="global-connectivity" class="hero-image-container" style="opacity: 0; pointer-events: none; transform: scale(0.8);">
+        <img src="motherboard.PNG" alt="Connectivity Motherboard" class="hero-image" id="connectivity-motherboard">
+        
+        <!-- Floating Icons Container -->
+        <div id="connectivity-icons" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;">
+            <div class="conn-icon-wrapper" id="icon-wifi" style="top: 15%; left: 10%;">
+                <svg viewBox="0 0 24 24" class="conn-icon"><path fill="currentColor" d="M12 21c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm-4.6-4.6c.4-.4 1-.4 1.4 0 .4.4.4 1 0 1.4-1.6 1.6-4.2 1.6-5.8 0-.4-.4-.4-1 0-1.4.4-.4 1-.4 1.4 0 .8.8 2.1.8 3 0zm9.2 0c.4.4 1 .4 1.4 0 .4-.4.4-1 0-1.4-1.6-1.6-4.2-1.6-5.8 0-.4.4-.4 1 0 1.4.4.4 1 .4 1.4 0 .8-.8 2.1-.8 3 0zm-13.8-4.6c.4-.4 1-.4 1.4 0 .4.4.4 1 0 1.4-3.1 3.1-8.2 3.1-11.3 0-.4-.4-.4-1 0-1.4.4-.4 1-.4 1.4 0 2.3 2.3 6.1 2.3 8.5 0zm18.4 0c.4.4 1 .4 1.4 0 .4-.4.4-1 0-1.4-3.1-3.1-8.2-3.1-11.3 0-.4.4-.4 1 0 1.4.4.4 1 .4 1.4 0 2.3-2.3 6.1-2.3 8.5 0z"/></svg>
+                <div class="wifi-ripple"></div>
+            </div>
+            <div class="conn-icon-wrapper" id="icon-usb" style="top: 75%; left: 20%;">
+                <svg viewBox="0 0 24 24" class="conn-icon"><path fill="currentColor" d="M15 7v4h1v2h-3V5h2l-3-4-3 4h2v8H8v-2.07c.7-.37 1.2-1.08 1.2-1.93 0-1.21-.99-2.2-2.2-2.2-1.21 0-2.2.99-2.2 2.2 0 .85.5 1.56 1.2 1.93V13c0 1.11.89 2 2 2h3v3.05c-.71.37-1.2 1.09-1.2 1.95 0 1.21.99 2.2 2.2 2.2 1.21 0 2.2-.99 2.2-2.2 0-.86-.49-1.58-1.2-1.95V15h3c1.11 0 2-.89 2-2v-2h1V7h-4z"/></svg>
+            </div>
+            <div class="conn-icon-wrapper" id="icon-eth" style="top: 40%; left: 85%;">
+                <svg viewBox="0 0 24 24" class="conn-icon"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+            </div>
+        </div>
+
+        <div id="data-particles-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6;"></div>
+        <div class="light-sweep"></div>
+    </div>
+
+    <!-- New BIOS Slide -->
+    <div id="global-bios" class="hero-image-container" style="opacity: 0; pointer-events: none; transform: scale(0.8);">
+        <img src="motherboard.PNG" alt="BIOS Motherboard" class="hero-image" id="bios-motherboard" style="transform: translateY(10%);">
+        
+        <!-- Hologram UI Panels -->
+        <div id="bios-ui-panels" style="position: absolute; top: -10%; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;">
+            <!-- CPU / RAM Stats Panel -->
+            <div class="hologram-panel" id="holo-stats" style="top: 15%; left: 5%;">
+                <div class="holo-header">SYSTEM STATS</div>
+                <div class="holo-data">CPU <span class="holo-number" id="holo-cpu">42</span>%</div>
+                <div class="holo-bar"><div class="holo-fill" style="width: 42%;"></div></div>
+                <div class="holo-data">RAM <span class="holo-number" id="holo-ram">16</span>GB</div>
+                <div class="holo-bar"><div class="holo-fill" style="width: 60%;"></div></div>
+            </div>
+            
+            <!-- Temperature Panel -->
+            <div class="hologram-panel" id="holo-temp" style="top: 5%; left: 65%;">
+                <div class="holo-header">THERMAL</div>
+                <div class="holo-temp-circle">
+                    <span class="holo-number" style="display:inline-block;" id="holo-temp-val">38</span>°C
+                </div>
+                <div class="holo-data" style="text-align: center; font-size: 0.6rem; display: block;">STATUS: OPTIMAL</div>
+            </div>
+            
+            <!-- Performance Sliders Panel -->
+            <div class="hologram-panel" id="holo-perf" style="top: 55%; left: 75%;">
+                <div class="holo-header">TUNING</div>
+                <div class="holo-data">VOLTAGE</div>
+                <div class="holo-slider"><div class="holo-thumb" style="left: 70%;"></div></div>
+                <div class="holo-data">FAN SPEED</div>
+                <div class="holo-slider"><div class="holo-thumb" style="left: 45%;"></div></div>
+            </div>
+        </div>
+
+        <!-- Connection lines canvas -->
+        <svg id="bios-lines" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
+            <!-- Dynamic coordinates will be set by JS or using relative approx -->
+            <path id="line-stats" class="holo-line" d="M 120 180 L 250 350" fill="none" stroke="rgba(0, 210, 255, 0.3)" stroke-width="1.5" stroke-dasharray="4,4"/>
+            <path id="line-temp" class="holo-line" d="M 450 120 L 320 350" fill="none" stroke="rgba(0, 210, 255, 0.3)" stroke-width="1.5" stroke-dasharray="4,4"/>
+            <path id="line-perf" class="holo-line" d="M 480 350 L 350 380" fill="none" stroke="rgba(0, 210, 255, 0.3)" stroke-width="1.5" stroke-dasharray="4,4"/>
+        </svg>
+
+        <div class="light-sweep"></div>
+    </div>
+
+    <!-- New Future Slide -->
+    <div id="global-future" class="hero-image-container" style="opacity: 0; pointer-events: none; transform: scale(0.8);">
+        
+        <!-- The Glowing Core -->
+        <div id="future-core" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 120px; height: 120px; background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,210,255,0.8) 30%, rgba(0,0,0,0) 70%); border-radius: 50%; box-shadow: 0 0 60px 20px rgba(0,210,255,0.4); z-index: 5; pointer-events: none;"></div>
+        
+        <!-- Shards of Motherboard -->
+        <div id="future-shards" style="position: relative; width: 100%; height: 600px; z-index: 10; pointer-events: none;">
+            <img src="motherboard.PNG" alt="Motherboard Shard" class="future-shard" style="clip-path: polygon(0 0, 60% 0, 40% 45%, 0 55%);">
+            <img src="motherboard.PNG" alt="Motherboard Shard" class="future-shard" style="clip-path: polygon(60% 0, 100% 0, 100% 40%, 65% 55%, 40% 45%);">
+            <img src="motherboard.PNG" alt="Motherboard Shard" class="future-shard" style="clip-path: polygon(0 55%, 40% 45%, 45% 100%, 0 100%);">
+            <img src="motherboard.PNG" alt="Motherboard Shard" class="future-shard" style="clip-path: polygon(45% 100%, 40% 45%, 65% 55%, 100% 40%, 100% 100%);">
+        </div>
+
+        <!-- NEW: Quantum 3D Motherboard (Futuristic) -->
+        <model-viewer src="motherboard__components.glb" id="future-quantum" class="hero-image" camera-controls interaction-prompt="none" min-camera-orbit="auto 0deg auto" max-camera-orbit="auto 180deg auto" exposure="1.2" environment-image="neutral" style="position: absolute; top: 0; left: 0; width: 100%; height: 600px; opacity: 0; transform: scale(0.5); z-index: 12; filter: drop-shadow(0 0 80px rgba(0, 255, 255, 0.9)) hue-rotate(180deg) saturate(2.5) contrast(1.5) brightness(1.2); mix-blend-mode: normal !important; pointer-events: auto;"></model-viewer>
+
+        <div id="future-particles" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15;"></div>
+        <div class="light-sweep"></div>
+    </div>
+
+    <!-- Slide Container -->
+    <div id="slide-container">
+        
+        <!-- SLIDE 1: Motherboard Intro -->
+        <section class="slide active" id="slide-1">
+            <div class="slide-content split-layout">
+                <div class="left-column">
+                    <div class="badge">
+                        <span class="badge-dot"></span>
+                        NEXT GEN ARCHITECTURE
+                    </div>
+                    <h1 class="hero-title">Features of<br>Motherboards</h1>
+                    <h2 class="hero-subtitle">The foundation of extreme performance.</h2>
+                    
+                    <div class="keyboard-hint" style="margin-top: 50px;">
+                        <span class="key">D</span> Next Slide
+                    </div>
+                </div>
+                <div class="right-column"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Intelligent Chipset -->
+        <section class="slide" id="slide-2">
+            <!-- Full background AI Algorithm overlay -->
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('ai-bg.png'); background-size: cover; background-position: center; mix-blend-mode: screen; opacity: 0.08; z-index: -1;"></div>
+            <div class="slide-content split-layout">
+                <div class="left-column">
+                    <div class="badge">
+                        <span class="badge-dot"></span>
+                        AI NEURAL CORE
+                    </div>
+                    <h1 class="hero-title">Intelligent<br>Chipset</h1>
+                    <h2 class="hero-subtitle" style="margin-bottom: 30px;">The Control Center of the Motherboard</h2>
+                    
+                    <ul class="premium-bullets">
+                        <li><span class="bullet-dot"></span> Manages data flow between CPU, RAM, and GPU</li>
+                        <li><span class="bullet-dot"></span> Acts like a traffic controller inside the system</li>
+                        <li><span class="bullet-dot"></span> Uses AI for automatic performance optimization</li>
+                        <li><span class="bullet-dot"></span> Controls power and heat efficiently</li>
+                    </ul>
+                    
+                    <div class="keyboard-hint" style="margin-top: 50px;">
+                        <span class="key">A</span> Previous &nbsp;&nbsp;&nbsp; <span class="key">D</span> Next
+                    </div>
+                </div>
+                <div class="right-column"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: PCIe & GPU Performance -->
+        <section class="slide" id="slide-3">
+            <div class="slide-content split-layout">
+                <div class="left-column">
+                    <div class="badge">
+                        <span class="badge-dot"></span>
+                        ULTRA BANDWIDTH
+                    </div>
+                    <h1 class="hero-title">High-Speed<br>Expansion</h1>
+                    <h2 class="hero-subtitle" style="margin-bottom: 30px;">PCIe & GPU Performance</h2>
+                    
+                    <ul class="premium-bullets">
+                        <li><span class="bullet-dot"></span> PCIe enables ultra-fast data transfer</li>
+                        <li><span class="bullet-dot"></span> GPU handles graphics and heavy processing</li>
+                        <li><span class="bullet-dot"></span> High bandwidth improves gaming and AI tasks</li>
+                        <li><span class="bullet-dot"></span> Designed for next-generation performance</li>
+                    </ul>
+                    
+                    <div class="keyboard-hint" style="margin-top: 50px;">
+                        <span class="key">A</span> Previous &nbsp;&nbsp;&nbsp; <span class="key">D</span> Next
+                    </div>
+                </div>
+                <div class="right-column"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: DDR5 RAM Performance -->
+        <section class="slide" id="slide-4">
+            <div class="slide-content split-layout">
+                <div class="left-column">
+                    <div class="badge">
+                        <span class="badge-dot"></span>
+                        NEXT-GEN MEMORY
+                    </div>
+                    <h1 class="hero-title">DDR5 RAM<br>Performance</h1>
+                    <h2 class="hero-subtitle" style="margin-bottom: 30px;">Fast and Intelligent Memory System</h2>
+                    
+                    <ul class="premium-bullets">
+                        <li><span class="bullet-dot"></span> DDR5 offers higher speed and bandwidth</li>
+                        <li><span class="bullet-dot"></span> Improves multitasking and system performance</li>
+                        <li><span class="bullet-dot"></span> More efficient power usage</li>
+                        <li><span class="bullet-dot"></span> Designed for future computing needs</li>
+                    </ul>
+                    
+                    <div class="keyboard-hint" style="margin-top: 50px;">
+                        <span class="key">A</span> Previous &nbsp;&nbsp;&nbsp; <span class="key">D</span> Next
+                    </div>
+                </div>
+                <div class="right-column"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Advanced Cooling System -->
+        <section class="slide" id="slide-5">
+            <div class="slide-content split-layout">
+                <div class="left-column">
+                    <div class="badge">
+                        <span class="badge-dot"></span>
+                        THERMAL MANAGEMENT
+                    </div>
+                    <h1 class="hero-title">Advanced<br>Cooling System</h1>
+                    <h2 class="hero-subtitle" style="margin-bottom: 30px;">Efficient Thermal Management</h2>
+                    
+                    <ul class="premium-bullets">
+                        <li><span class="bullet-dot"></span> Maintains optimal temperature for performance</li>
+                        <li><span class="bullet-dot"></span> Uses heatsinks, fans, and liquid cooling</li>
+                        <li><span class="bullet-dot"></span> Prevents overheating and system damage</li>
+                        <li><span class="bullet-dot"></span> Improves system stability and lifespan</li>
+                    </ul>
+                    
+                    <div class="keyboard-hint" style="margin-top: 50px;">
+                        <span class="key">A</span> Previous &nbsp;&nbsp;&nbsp; <span class="key">D</span> Next
+                    </div>
+                </div>
+                <div class="right-column"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Seamless Connectivity -->
+        <section class="slide" id="slide-6">
+            <div class="slide-content split-layout">
+                <div class="left-column">
+                    <div class="badge">
+                        <span class="badge-dot" style="box-shadow: 0 0 8px #00d2ff; background: #00d2ff;"></span>
+                        DATA HIGHWAY
+                    </div>
+                    <h1 class="hero-title">Seamless<br>Connectivity</h1>
+                    <h2 class="hero-subtitle" style="margin-bottom: 30px;">High-Speed Data Communication</h2>
+                    
+                    <ul class="premium-bullets">
+                        <li><span class="bullet-dot" style="background: #00d2ff;"></span> Supports WiFi, Ethernet, and USB connections</li>
+                        <li><span class="bullet-dot" style="background: #00d2ff;"></span> Enables fast and stable data transfer</li>
+                        <li><span class="bullet-dot" style="background: #00d2ff;"></span> Connects multiple devices efficiently</li>
+                        <li><span class="bullet-dot" style="background: #00d2ff;"></span> Designed for modern high-speed systems</li>
+                    </ul>
+                    
+                    <div class="keyboard-hint" style="margin-top: 50px;">
+                        <span class="key">A</span> Previous &nbsp;&nbsp;&nbsp; <span class="key">D</span> Next
+                    </div>
+                </div>
+                <div class="right-column"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Smart Control System -->
+        <section class="slide" id="slide-7">
+            <div class="slide-content split-layout">
+                <div class="left-column">
+                    <div class="badge">
+                        <span class="badge-dot" style="box-shadow: 0 0 8px #00d2ff; background: #00d2ff;"></span>
+                        SYSTEM INTELLIGENCE
+                    </div>
+                    <h1 class="hero-title">Smart Control<br>System</h1>
+                    <h2 class="hero-subtitle" style="margin-bottom: 30px;">BIOS & Intelligent Features</h2>
+                    
+                    <ul class="premium-bullets">
+                        <li><span class="bullet-dot" style="background: #00d2ff;"></span> BIOS controls system startup and hardware settings</li>
+                        <li><span class="bullet-dot" style="background: #00d2ff;"></span> Allows performance tuning and system monitoring</li>
+                        <li><span class="bullet-dot" style="background: #00d2ff;"></span> Supports automatic optimization and updates</li>
+                        <li><span class="bullet-dot" style="background: #00d2ff;"></span> Provides user-friendly control interface</li>
+                    </ul>
+                    
+                    <div class="keyboard-hint" style="margin-top: 50px;">
+                        <span class="key">A</span> Previous &nbsp;&nbsp;&nbsp; <span class="key">D</span> Next
+                    </div>
+                </div>
+                <div class="right-column"></div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: Future Technology -->
+        <section class="slide" id="slide-8">
+            <div class="slide-content split-layout">
+                <div class="left-column">
+                    <div class="badge">
+                        <span class="badge-dot" style="box-shadow: 0 0 8px #ffffff; background: #ffffff;"></span>
+                        THE NEXT ERA
+                    </div>
+                    <h1 class="hero-title">The Future is<br>Intelligent</h1>
+                    <h2 class="hero-subtitle" style="margin-bottom: 30px;">Evolution of Motherboards</h2>
+                    
+                    <ul class="premium-bullets">
+                        <li><span class="bullet-dot"></span> Integration of AI-driven performance systems</li>
+                        <li><span class="bullet-dot"></span> Self-optimizing and adaptive hardware</li>
+                        <li><span class="bullet-dot"></span> Faster, smarter, and more efficient computing</li>
+                        <li><span class="bullet-dot"></span> Foundation for future technologies</li>
+                    </ul>
+                    
+                    <div class="keyboard-hint" style="margin-top: 50px;">
+                        <span class="key">A</span> Previous
+                    </div>
+                </div>
+                <div class="right-column"></div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
